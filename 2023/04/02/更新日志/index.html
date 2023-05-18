@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8" />
+        <title>更新日志 | L.Y. Chen</title>
+        <meta name="author" content="OYAMAMahiro" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <link rel="icon" href="/images/favicon.png" />
+        <script src="https://cdn.staticfile.org/vue/3.2.47/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.3.0/css/all.min.css" />
+<link rel="stylesheet" href="/css/fonts.min.css" />
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+    <meta name="generator" content="Hexo 5.4.2"></head>
+    <body>
+        <div id="layout">
+            <transition name="fade">
+                <div id="loading" v-show="loading">
+                    <div id="loading-circle">
+                        <h2>LOADING</h2>
+                        <p>加载过慢请开启缓存 浏览器默认开启</p>
+                        <img src="/images/loading.gif" />
+                    </div>
+                </div>
+            </transition>
+            <nav id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <div id="desktop-menu">
+        <a class="title" href="/">
+            <span>L.Y. CHEN</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </div>
+    <div id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;L.Y. CHEN</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </div>
+</nav>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+            <transition name="into">
+                <div id="main" v-show="!loading">
+                    <div class="article">
+    <div>
+        <h1>更新日志</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/4/2
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>站点数据更新日志统一记录页</p>
+<span id="more"></span>
+<h1 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h1><h2 id="5月6日-更新日志"><a href="#5月6日-更新日志" class="headerlink" title="5月6日 更新日志"></a>5月6日 更新日志</h2><ul>
+<li>3A415页面临时改为Major 2023倒计时界面 (单击页面中的图片可跳转至主办方官网)</li>
+</ul>
+<h2 id="5月4日-更新日志"><a href="#5月4日-更新日志" class="headerlink" title="5月4日 更新日志"></a>5月4日 更新日志</h2><ul>
+<li>3A415界面更新彩蛋 (界面重写)</li>
+<li>优化部分浏览体验</li>
+</ul>
+<h2 id="5月1日-更新日志"><a href="#5月1日-更新日志" class="headerlink" title="5月1日 更新日志"></a>5月1日 更新日志</h2><ul>
+<li>更改部分页面的背景图</li>
+<li>在<strong>OBS——推流录制工具</strong>一文中插入若干图片</li>
+<li>在全局底栏和文章页正文标题中加入渐变文字效果</li>
+</ul>
+<h2 id="4月28日-更新日志"><a href="#4月28日-更新日志" class="headerlink" title="4月28日 更新日志"></a>4月28日 更新日志</h2><ul>
+<li>新增文章：<strong>OBS-推流录制工具</strong></li>
+<li>更新文章：<strong>CSGO控制台指令简明索引</strong></li>
+<li>更改了部分文章的banner图片</li>
+</ul>
+<h2 id="4月27日-更新日志"><a href="#4月27日-更新日志" class="headerlink" title="4月27日 更新日志"></a>4月27日 更新日志</h2><ul>
+<li>新增文章：<strong>大学英语语法总结</strong></li>
+<li>更改主页图片</li>
+<li>优化导航栏模糊效果</li>
+</ul>
+<h2 id="4月3日-更新日志"><a href="#4月3日-更新日志" class="headerlink" title="4月3日 更新日志"></a>4月3日 更新日志</h2><ul>
+<li>新增页面：<strong>3A415</strong></li>
+<li>简化顶部导航栏项目</li>
+</ul>
+<h2 id="4月2日更新日志"><a href="#4月2日更新日志" class="headerlink" title="4月2日更新日志"></a>4月2日更新日志</h2><ul>
+<li>站点底部新增外部链接</li>
+<li>新增全局中国标准时间校准</li>
+<li>新增文章：<strong>更新日志</strong></li>
+<li>关于页面新增外部链接和图片</li>
+</ul>
+<h2 id="3月29日-更新日志"><a href="#3月29日-更新日志" class="headerlink" title="3月29日 更新日志"></a>3月29日 更新日志</h2><ul>
+<li>站点底部加入访问统计数据</li>
+<li>新增文章：<strong>CSGO控制台指令简明索引</strong></li>
+<li>添加文章在首页展示的简略描述信息</li>
+<li>新增文章页的数据统计</li>
+<li>新增文章页的更新通知</li>
+</ul>
+<h2 id="3月27日-更新日志"><a href="#3月27日-更新日志" class="headerlink" title="3月27日 更新日志"></a>3月27日 更新日志</h2><ul>
+<li>新建 <strong>关于</strong> 页面</li>
+<li>更改关于页面中的相关信息</li>
+<li>新增站点顶栏毛玻璃模糊效果</li>
+</ul>
+<h2 id="3月24日-更新日志"><a href="#3月24日-更新日志" class="headerlink" title="3月24日 更新日志"></a>3月24日 更新日志</h2><ul>
+<li>更改站点全局主题</li>
+<li>更改站点全局字体为系统UI字体</li>
+<li>加入文章字数和浏览量统计</li>
+<li>加入文章发布时间和作者署名</li>
+</ul>
+<h2 id="3月23日-更新日志"><a href="#3月23日-更新日志" class="headerlink" title="3月23日 更新日志"></a>3月23日 更新日志</h2><ul>
+<li>新建站点ChenHNSY.Gitee.io</li>
+<li>更改站点标题为OYAMAMahiro</li>
+<li>更改站点的归属权为OYAMAMahiro</li>
+<li>更改站点首页文字</li>
+<li>调快首页文字的出场速度</li>
+</ul>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+                    <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2023 L.Y. Chen
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;OYAMAMahiro
+        </div>
+        <div>
+            网站基于 <a target="_blank" rel="noopener" href="https://hexo.io/api/index.html">Hexo Engine API</a> 全栈开发 &
+            使用 <a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cdn">腾讯云服务</a> CDN加速
+            <div>
+                <a  target="_blank" href="https://time.is/Guangzhou" id="time_is_link" rel="nofollow noopener" style="font-size:17px">中国广州时间：</a>
+                <span id="Guangzhou_z43d" style="font-size:17px"></span>
+                <script src="//widget.time.is/t.js"></script>
+                <script>
+                    time_is_widget.init({Guangzhou_z43d:{}});
+                </script>
+            </div>
+            <div>
+                <a href="https://icp.gov.moe/?keyword=20230452" target="_blank">萌ICP备20230452号</a>
+            </div>
+
+        </div>
+        
+    </div>
+</footer>
+
+                </div>
+            </transition>
+            
+            <transition name="fade">
+                <div id="preview" ref="preview" v-show="previewShow">
+                    <img id="preview-content" ref="previewContent" />
+                </div>
+            </transition>
+            
+        </div>
+        <script src="/js/main.js"></script>
+        
+        
+
+
+
+
+        
+    </body>
+</html>
