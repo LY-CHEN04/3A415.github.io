@@ -2,6 +2,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
+
+        <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas>
+        <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+        <script type="text/javascript" src="/js/fireworks.js"></script>
+
+
         <meta charset="utf-8" />
         <title>Intel QSV在FFmpeg中的实现与使用 | L.Y. Chen</title>
         <meta name="author" content="OYAMAMahiro" />
@@ -164,25 +170,25 @@
         <p>文章摘自CSDN社区。本文经修改。</p>
 <span id="more"></span>
 
-<h2 id="一、处理器整体架构"><a href="#一、处理器整体架构" class="headerlink" title="一、处理器整体架构"></a>一、处理器整体架构</h2><p><img src="/img/QSV1.jpg"><br>英特尔的图形处理GPU被称为“核芯显卡”，与CPU集成封装在同一个芯片上，上图展示的是芯片的内部结构。</p>
-<h3 id="1-1-发展"><a href="#1-1-发展" class="headerlink" title="1.1 发展"></a>1.1 发展</h3><p><img src="/img/QSV2.jpg"><br>英特尔从lvy Bridge架构开始就尝试将GPU与CPU集成在中央处理芯片中并逐代发展到Skylake架构。初期的Ivy Bridge架构中GPU所占的面积非常小，而到现在的第五代处理器架构Skylake已经实现十分成熟的GPU集成技术，GPU在芯片中所占的面积已经超过了一半。在未来将推出基于PCI-E的独立显卡，为PC带来更大的图像性能提升。</p>
-<h3 id="1-2-基础功能模块"><a href="#1-2-基础功能模块" class="headerlink" title="1.2 基础功能模块"></a>1.2 基础功能模块</h3><p><img src="/img/QSV3.jpg"><br>上图展示的是一款GPU所具备的一些基础功能模块。英特尔的核芯显卡分为普通的Intel HD Graphics与性能强大的Intel Iris (Pro)Graphics，其中硬件结构的变化决定性能的高低。GPU中的Slice个数越多，处理单元的组织方式越多，性能便越强大。</p>
+<h2 id="一、处理器整体架构"><a href="#一、处理器整体架构" class="headerlink" title="一、处理器整体架构"></a>一、处理器整体架构</h2><p><img src="/images/QSV1.jpg"><br>英特尔的图形处理GPU被称为“核芯显卡”，与CPU集成封装在同一个芯片上，上图展示的是芯片的内部结构。</p>
+<h3 id="1-1-发展"><a href="#1-1-发展" class="headerlink" title="1.1 发展"></a>1.1 发展</h3><p><img src="/images/QSV2.jpg"><br>英特尔从lvy Bridge架构开始就尝试将GPU与CPU集成在中央处理芯片中并逐代发展到Skylake架构。初期的Ivy Bridge架构中GPU所占的面积非常小，而到现在的第五代处理器架构Skylake已经实现十分成熟的GPU集成技术，GPU在芯片中所占的面积已经超过了一半。在未来将推出基于PCI-E的独立显卡，为PC带来更大的图像性能提升。</p>
+<h3 id="1-2-基础功能模块"><a href="#1-2-基础功能模块" class="headerlink" title="1.2 基础功能模块"></a>1.2 基础功能模块</h3><p><img src="/images/QSV3.jpg"><br>上图展示的是一款GPU所具备的一些基础功能模块。英特尔的核芯显卡分为普通的Intel HD Graphics与性能强大的Intel Iris (Pro)Graphics，其中硬件结构的变化决定性能的高低。GPU中的Slice个数越多，处理单元的组织方式越多，性能便越强大。</p>
 <p>Intel HD Graphics也就是GT2中只有一个Slice，而对于Iris系列中的GT3则有两个Slice；GT3e相对于GT3增加了eDRAM使其具有更快的内存访问速度，而GT4e则增加到三个Slice。</p>
 <p>GPU的基础功能模块主要由EU以及相关的Media Processing（MFX）等组成。一个Slice中有三个Sub-Slice，Sub-Slice中包含具体的EU和Media Sampler模块作为最基本的可编程处理单元，GPU相关的任务都是在EU上进行。而Media Processing中还集成了一个被称为MFX的独立模块，主要由Media Format Codec（MFX）与VQE组成。</p>
 <p>MFX可将一些处理任务通过Fix Function打包，固定于一个执行单元中进行统一的编解码处理，不调用EU从而实现提高EU处理3D图形等任务的速度。Video Quality Engine（VQE）提供De-interlace与De-Noise等视频处理任务，在编解码中使用EU是为了得到更高的视频编码质量。</p>
-<h3 id="1-3-结构演进"><a href="#1-3-结构演进" class="headerlink" title="1.3 结构演进"></a>1.3 结构演进</h3><p><img src="/img/QSV4.jpg"><br>上图展示的是英特尔几代核芯显卡产品在结构上的变化。</p>
+<h3 id="1-3-结构演进"><a href="#1-3-结构演进" class="headerlink" title="1.3 结构演进"></a>1.3 结构演进</h3><p><img src="/images/QSV4.jpg"><br>上图展示的是英特尔几代核芯显卡产品在结构上的变化。</p>
 <p>最早的Haswell架构也就是v3系列中的EU个数相对较少，最多为40个；而到Broadwell架构的GT3中集成了2个Slice，EU个数随之增加到48个，图像处理性能也随之增强。</p>
 <p>从Broadwell架构发展到Skylake架构，除了EU与Slice格式增加的变化，MFX的组织也有相应改进。Broadwell架构是将MFX集成于一个Slice中，一个Slice集成一个MFX；而到Skylake架构之后Slice的个数增加了但MFX的个数并没有，此时的MFC便集成在Slice之外。</p>
-<p>随着组织方式的改变，核芯显卡的功能也随之改变：Skylake增加了HEVC的Decoder、PAK增加了基于HEVC的处理功能等改进为核芯显卡整体处理性能带来了显著提升，第六代以后的核芯显卡也都主要沿用GT3的架构组织。<br><img src="/img/QSV5.jpg"></p>
+<p>随着组织方式的改变，核芯显卡的功能也随之改变：Skylake增加了HEVC的Decoder、PAK增加了基于HEVC的处理功能等改进为核芯显卡整体处理性能带来了显著提升，第六代以后的核芯显卡也都主要沿用GT3的架构组织。<br><img src="/images/QSV5.jpg"></p>
 <blockquote>
 <p>从Driver分发下来的Command Stream回通过多条路径在GPU上得到执行：如果命令属于编解码的Fix Function则会由MFX执行，部分与视频处理相关的命令会由VQE执行，其他的命令则会由EU执行。</p>
 </blockquote>
 <p>而编码过程主要分为两部分：ENC与PAK。ENC主要通过硬件实现Rate Control、Motion Estimation、Intra Prediction、Mode Decision等功能；PAK进行Motion Comp、Intra Prediction、Forward Quant、Pixel Reconstruction、Entropy Coding等功能。<br>在目前的英特尔架构中，Media SDK通过API对硬件进行统一的调度与使用，同时我们提供更底层的接口Flexible Encoder Interface（FEI）以实现更优秀的底层调度与更好的处理效果。</p>
-<h2 id="2、软件策略"><a href="#2、软件策略" class="headerlink" title="2、软件策略"></a>2、软件策略</h2><p><img src="/img/QSV6.jpg"><br>最底层的FFmpeg可允许开发者将QSV集成进FFmpeg中以便于开发，而Media SDK则主要被用于编解码处理，FFmpeg可把整个多媒体处理有效结合。</p>
+<h2 id="2、软件策略"><a href="#2、软件策略" class="headerlink" title="2、软件策略"></a>2、软件策略</h2><p><img src="/images/QSV6.jpg"><br>最底层的FFmpeg可允许开发者将QSV集成进FFmpeg中以便于开发，而Media SDK则主要被用于编解码处理，FFmpeg可把整个多媒体处理有效结合。</p>
 <p>如果开发者认为传统的Media SDK的处理质量无法达到要求或码率控制不符合某些特定场景，那么可以通过调用FEI等更底层的接口对控制算法进行优化；最顶层的OpenCL接口则利用GPU功能实现边缘计算等处理任务，常见的Hybrid编码方式便使用了OpenCL。除此之外OpenCL也可实现一些其他的并行处理功能，例如与AI相关的一些计算。</p>
-<h3 id="2-1-Media-SDK"><a href="#2-1-Media-SDK" class="headerlink" title="2.1 Media SDK"></a>2.1 Media SDK</h3><p><img src="/img/QSV7.jpg"><br>Media SDK分为以下几个版本：Community Edition是一个包含了基本功能的部分免费版本，Essential Edition与Professional Edition则是具有更多功能的收费版本，可实现例如hybrid HEVC 编码，Audio的编解码、Video Quality Caliper Tool等诸多高级功能和分析工具的集合。</p>
+<h3 id="2-1-Media-SDK"><a href="#2-1-Media-SDK" class="headerlink" title="2.1 Media SDK"></a>2.1 Media SDK</h3><p><img src="/images/QSV7.jpg"><br>Media SDK分为以下几个版本：Community Edition是一个包含了基本功能的部分免费版本，Essential Edition与Professional Edition则是具有更多功能的收费版本，可实现例如hybrid HEVC 编码，Audio的编解码、Video Quality Caliper Tool等诸多高级功能和分析工具的集合。</p>
 <ol>
-<li>软件架构<br><img src="/img/QSV8.jpg"></li>
+<li>软件架构<br><img src="/images/QSV8.jpg"></li>
 </ol>
 <ul>
 <li>上图主要介绍的是Media Server Studio Software Stack软件架构，我们基于此架构实现FFmpeg的加速。</li>
@@ -199,9 +205,9 @@
 <ol start="2">
 <li>编解码支持</li>
 </ol>
-<p><img src="/img/QSV9.jpg"></p>
+<p><img src="/images/QSV9.jpg"></p>
 <p>关于编解码支持，其中我想强调的是HEVC 8 bit 与10 bit的编解码。在Gen 9也就是Skylake上并不支持硬件级别的HEVC 10 bit解码，面对这种情况我们可以通过混合模式实现对HEVC 10 bit的编解码功能。最新E3v6（Kabylake）虽然只有较低性能的GPU配置，但可以支持HEVC 10 bit解码，HEVC 10 bit编码功能则会在以后发布的芯片中提供。</p>
-<h3 id="2-2-QSV到FFmpeg的集成思路"><a href="#2-2-QSV到FFmpeg的集成思路" class="headerlink" title="2.2 QSV到FFmpeg的集成思路"></a>2.2 QSV到FFmpeg的集成思路</h3><p><img src="/img/QSV10.jpg"></p>
+<h3 id="2-2-QSV到FFmpeg的集成思路"><a href="#2-2-QSV到FFmpeg的集成思路" class="headerlink" title="2.2 QSV到FFmpeg的集成思路"></a>2.2 QSV到FFmpeg的集成思路</h3><p><img src="/images/QSV10.jpg"></p>
 <p>FFmpeg集成的思路主要如下：</p>
 <ol>
 <li><p>FFmpeg QSV Plugins：将SDK作为FFmpeg的一部分进行封装，其中包括Decoder、Encoder与VPP Filter处理。</p>
@@ -209,7 +215,7 @@
 <li><p>VAPPI Plugin：Media对整个英特尔GPU的软件架构而言，从最底层的linux内核，中间有用户态驱动，对外的统一的接口就是VAAPI。Media SDK的硬件加速就是基于VAAPI开发，同时增加了很多相关的功能，其代码更为复杂；而现在增加的VAAPI Plugin则会直接调用LibAV使软硬件结合更为紧密。</p>
 </li>
 </ol>
-<p><img src="/img/QSV11.jpg"></p>
+<p><img src="/images/QSV11.jpg"></p>
 <p>将SDK集成到FFmpeg中，一共分为AVDecoder、AVEncoder、AVFilter三个部分：</p>
 <ol>
 <li>AVFilter</li>
@@ -227,7 +233,7 @@
 <p>最理想的方案是在整条视频处理的Pipeline中都使用显卡内存从而不存在内存之间的帧拷贝，从而达到最快的处理速度，但在实际应用中我们很多时候是做不到这一点。</p>
 <p>将MSDK集成进FFmpeg中时需要解决内存转换的问题，例如VPP Filter不支持一些功能或原始码流并不在Decoder支持的列表中。上图中粉色与绿色的转换表示的就是数据从显存到系统内存再到显存之间的转换。我们在实践中经常会遇到处理性能的急剧变化，可能的原因就是一些非硬件处理的模块和硬件加速的模块存在与同一个pipeline中，从而对整体性能造成影响。这是因为进行了额外的内存拷贝过程，一旦优化不足则会极大影响性能。</p>
 <p>具体进行内存分配时我们使用了hwcontext，这是FFmpeg在3.0之后增加的一个功能。我们基于FFmpeg中hwcontext的机制实现了hwcontext_qsv，从而对硬件的初始化与内存分配进行很好的管理。</p>
-<h2 id="三、对比MSS与FFmpeg-QSV"><a href="#三、对比MSS与FFmpeg-QSV" class="headerlink" title="三、对比MSS与FFmpeg+QSV"></a>三、对比MSS与FFmpeg+QSV</h2><p><img src="/img/QSV12.jpg"></p>
+<h2 id="三、对比MSS与FFmpeg-QSV"><a href="#三、对比MSS与FFmpeg-QSV" class="headerlink" title="三、对比MSS与FFmpeg+QSV"></a>三、对比MSS与FFmpeg+QSV</h2><p><img src="/images/QSV12.jpg"></p>
 <blockquote>
 <blockquote>
 <p>二者支持相同的编解码器与视频处理。</p>

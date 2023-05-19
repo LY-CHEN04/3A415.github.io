@@ -2,6 +2,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
+
+        <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas>
+        <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+        <script type="text/javascript" src="/js/fireworks.js"></script>
+
+
         <meta charset="utf-8" />
         <title>CSGO控制台指令简明索引 | L.Y. Chen</title>
         <meta name="author" content="OYAMAMahiro" />
@@ -171,7 +177,7 @@
 <li>显示各种网络参数的指令<code>net_graph 1</code>，输入至<code>net_</code>时下方第一条指令就是<code>net_graph</code>，直接按下<code>Tab</code>和<code>1</code>即可快速输入这条完整的指令。</li>
 <li>退出游戏的指令<code>quit</code>，原理同上，输入<code>q</code>→<code>Tab</code>→<code>回车</code>，即可实现光速quit（真实）。</li>
 </ul>
-<p>不要小看提示，他可以很大程度上纠正拼写问题，有时使用指令&#x2F;CFG的时候可以试着手动输一遍，过程中提示消失很可能是拼写有误；同样，如果使用HLAE录制集锦，输入<code>mirv</code>发现没有提示极可能没有正确的使用HLAE启动CSGO。</p>
+<p>不要小看提示，他可以很大程度上纠正拼写问题，有时使用指令&#x2F;CFG的时候可以试着手动输一遍，过程中提示消失很可能是拼写有误；同样，如果使用HLAE录制集锦，输入<code>mirv</code>发现没有提示极可能没有正确地使用HLAE启动CSGO。</p>
 <h2 id="常用控制台指令"><a href="#常用控制台指令" class="headerlink" title="常用控制台指令"></a>常用控制台指令</h2><h3 id="账号登录相关"><a href="#账号登录相关" class="headerlink" title="账号登录相关"></a>账号登录相关</h3><ul>
 <li>quit 快速退出游戏，使用心态爆炸，光速quit</li>
 <li>exit 同上，不过没有那么有名</li>
@@ -262,7 +268,7 @@
 <p>bind指令还有一种用法，用来查看某个按键已经绑定的指令：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind x</span><br></pre></td></tr></table></figure>
 
-<p>输入之后控制台会显示已经绑定的指令，可以检查有没有正确的绑定按键。</p>
+<p>输入之后控制台会显示已经绑定的指令，可以检查有没有正确地绑定按键。</p>
 <h3 id="unbind指令"><a href="#unbind指令" class="headerlink" title="unbind指令"></a>unbind指令</h3><p>清除已绑定的键位，比如已经绑定了x键，想要取消：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unbind x</span><br></pre></td></tr></table></figure>
 

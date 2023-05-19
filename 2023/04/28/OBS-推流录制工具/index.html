@@ -2,6 +2,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
+
+        <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas>
+        <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+        <script type="text/javascript" src="/js/fireworks.js"></script>
+
+
         <meta charset="utf-8" />
         <title>OBS_推流录制工具 | L.Y. Chen</title>
         <meta name="author" content="OYAMAMahiro" />
@@ -164,7 +170,7 @@
         <p>基于OBS 28.0 的基础面板解释。</p>
 <span id="more"></span>
 <h1 id="OBS——推流录制工具"><a href="#OBS——推流录制工具" class="headerlink" title="OBS——推流录制工具"></a>OBS——推流录制工具</h1><p><strong>OBS</strong> (Open Broadcaster Software) 是一款开源、免费、跨平台的直播推流和视频录制工具，它功能强大、可调空间大、上限很高，但是因为它主要为直播而设计，录制操作的便利性较差，上手有一定难度。和一众录屏工具（包括N&#x2F;A卡驱动自带录屏）和它的套皮软件相比，OBS 属于那种 <strong>“愿意花一些时间研究能带来更高画质和效率”</strong> 的工具。</p>
-<p>本文将会基于 <code>28.0</code> 版本介绍直播推流和录制相关的设置，并以<strong>CSGO素材录制</strong>为例介绍游戏场景下的设置策略和一些 Trick，注意 OBS 实际分为 Studio 和 Classic 两个版本，Classic 版本有更好的兼容性，对较老的系统和设备有些用处，一般都用 Studio 版本。<br><img src="/img/OBS0.png"></p>
+<p>本文将会基于 <code>28.0</code> 版本介绍直播推流和录制相关的设置，并以<strong>CSGO素材录制</strong>为例介绍游戏场景下的设置策略和一些 Trick，注意 OBS 实际分为 Studio 和 Classic 两个版本，Classic 版本有更好的兼容性，对较老的系统和设备有些用处，一般都用 Studio 版本。<br><img src="/images/OBS0.png"></p>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>官网：<a target="_blank" rel="noopener" href="https://obsproject.com/">https://obsproject.com</a></p>
 <p>项目：<a target="_blank" rel="noopener" href="https://github.com/obsproject/obs-studio">https://github.com/obsproject/obs-studio</a></p>
 <p>论坛：<a target="_blank" rel="noopener" href="https://obsproject.com/forum">https://obsproject.com/forum</a></p>
@@ -173,7 +179,7 @@
 <p>资源页包含各种插件、脚本、主题和工具。</p>
 </blockquote>
 <p>OBS Studio 已经登录 Steam 商店，同样免费。如果担心下载和更新的速度，可以直接从 Steam 下载，相对更加方便。</p>
-<h2 id="初识OBS"><a href="#初识OBS" class="headerlink" title="初识OBS"></a>初识OBS</h2><p><img src="/img/OBS1.png"><br>启动 OBS，忽略首次引导，主界面如图所示。可以看到界面分为以下几个部分：</p>
+<h2 id="初识OBS"><a href="#初识OBS" class="headerlink" title="初识OBS"></a>初识OBS</h2><p><img src="/images/OBS1.png"><br>启动 OBS，忽略首次引导，主界面如图所示。可以看到界面分为以下几个部分：</p>
 <ul>
 <li>顶部菜单栏</li>
 <li>预览窗口</li>
@@ -188,10 +194,10 @@
 <p>可以添加的来源有很多种，首先添加一个 <code>显示器采集</code> 源，一切默认，这样我们就能预览看到画面了。</p>
 <p><code>游戏源</code> 和 <code>窗口采集</code> 可以专门捕获全屏游戏或某个游戏&#x2F;窗口，捕获游戏时的性能会更好，可以把它们放在显示器源的上层，兼顾性能和便利，也可以关闭显示器源，不暴露桌面情况只展示特定游戏或窗口。</p>
 <p><code>应用程序音频捕获</code> 是当前正在测试的功能，可以获取特定程序的声音，特别适合分离游戏&#x2F;语音音源，方便后期处理，后面会详细介绍。</p>
-<p><img src="/img/OBS2.png"></p>
+<p><img src="/images/OBS2.png"></p>
 <h3 id="混音器面板"><a href="#混音器面板" class="headerlink" title="混音器面板"></a>混音器面板</h3><p>这里我们可以调整各个声音来源的音量和滤镜，改变它们的混合比例。打开某个音源的滤镜页，可以添加 <code>降噪、阈值</code> 等滤镜，包括电脑中已安装的VST效果，图中简单加了一个 <code>噪音抑制</code>，效果尚可。</p>
 <p>点“齿轮”按钮或右键打开<strong>高级音频属性</strong>，这里可以进一步调整音量、左右平衡、偏移和监听，和较为重要的<strong>轨道</strong>。轨道中某个数字是否勾选代表它是否在该轨道中出现，一般会在轨道1中保留主要声音&#x2F;直播观众听到的声音，其他轨道分别设置麦克风、开黑语音等音源，方便后期处理。</p>
-<p><img src="/img/OBS3.png"></p>
+<p><img src="/images/OBS3.png"></p>
 <h3 id="场景面板"><a href="#场景面板" class="headerlink" title="场景面板"></a>场景面板</h3><p>设置和调整各个场景（Scene），直播往往需要多个不同场景，如正式开播前的等候场景、游戏A、B、C的场景、聊天场景等等。提前设置好各个场景可以避免来源面板臃肿和不断开关来源的麻烦。搭配相应的工具（如StreamDeck）可以实现快速切换场景，给直播带来便利。</p>
 <p>场景之上还有一个场景集合的概念，在顶部菜单栏可以看到，可以更方便的分组、导入导出场景设置。</p>
 <h3 id="转场特效面板"><a href="#转场特效面板" class="headerlink" title="转场特效面板"></a>转场特效面板</h3><p>调整场景切换时的转场特效，默认只有渐变和裁切，即交叉溶解和硬切，通过安装转场插件可以添加更多效果。</p>
@@ -211,10 +217,10 @@
 <p><strong>自动封装至MP4格式</strong>再录制文件格式为MKV时会自动在录制完成后转换格式，后文中展开说明。</p>
 <p><strong>回放缓存文件名前缀&#x2F;后缀</strong> 设置回放缓存（即时重放）功能保存的视频文件名，和录制得到的文件作区分，建议前缀或者后缀改成<code>即时重放</code>。</p>
 <p><strong>串流延迟</strong>顾名思义，主要用于游戏直播防窥屏等需求。</p>
-<p><img src="/img/OBS4.png"></p>
+<p><img src="/images/OBS4.png"></p>
 <h2 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h2><p>输出页包含推流、录像、音频和回放缓存（即时重放）的设置，也是OBS设置的难点。</p>
 <p><strong>输出模式</strong>建议设置成 <code>高级</code> 以获得最大的调整空间，<code>简单模式</code> 下的录像设置不是很够。如果你想要更简单一些，可以先看下去，如果你需要的选项在 <code>简单模式</code> 下就能调整好也可以不动。</p>
-<p><img src="/img/OBS5.png"></p>
+<p><img src="/images/OBS5.png"></p>
 <h4 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h4><p>编码器是OBS设置的重点。其中 x264 是 CPU 软件编码，比较吃CPU的性能和多核性能，而显卡编码一般对性能影响较小，但是画质较差，NVIDIA显卡有 NVENC，AMD显卡有 AMF，Intel显卡有 QuickSync，Mac下也有对应的编码器。</p>
 <p>显卡编码非常适合游戏场景，我们可以把推流和录像都设置成显卡编码或者一个CPU编码、一个显卡编码平衡负载。</p>
 <h5 id="x264-编码器"><a href="#x264-编码器" class="headerlink" title="x264 编码器"></a>x264 编码器</h5><p>一般关注这三个设置</p>
@@ -250,7 +256,7 @@
 <p>编码器：如设置成 <strong>（使用推流编码器）</strong>，则会把直播的画面直接保存到本地，但对录像来说画质可能不够好，只求记录时可以这样设置，追求画面则设置成其他编码器。</p>
 <p>重新缩放输出：期望的推流和录像分辨率不一致时启用。</p>
 <p>自动分割文件：录制时间较长时可以固定文件大小&#x2F;时长分割保存到硬盘中，降低意外情况下的风险，也方便筛选素材。</p>
-<p><img src="/img/OBS6.png"></p>
+<p><img src="/images/OBS6.png"></p>
 <h4 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h4><p>这里可以设置更高的比特率&#x2F;码率&#x2F;位率，提高声音质量，也可以给不同的轨道起名字方便后期区分。</p>
 <h4 id="回放缓存"><a href="#回放缓存" class="headerlink" title="回放缓存"></a>回放缓存</h4><p>相当于N卡的即时重放，非常适合保存游戏的高光时刻。</p>
 <p>最长回放时间：建议设置 <code>90s</code> 或 <code>120s</code></p>
@@ -311,7 +317,7 @@
 </ul>
 <h4 id="帧率调整"><a href="#帧率调整" class="headerlink" title="帧率调整"></a>帧率调整</h4><p>录制高帧率素材的时候我们一般会慢放录像+限制FPS节省资源给OBS留出更多的性能空间，在编码设置确定之后调整录制帧率可以明显提高录制的速度，可参照上文设置120FPS甚至更高的帧率。</p>
 <p>菜单栏-停靠窗口-统计：启用统计面板，可以看到<strong>由于渲染延迟错过的帧</strong>和<strong>由于编码延迟跳过的帧</strong>和<strong>FPS</strong>。颜色变黄&#x2F;变红或丢帧较多时（偶尔）说明当前设置无法完美录像，需要调整编码器设置或降低录制FPS。</p>
-<p><img src="/img/OBS8.png"></p>
+<p><img src="/images/OBS8.png"></p>
 
     </div>
     
